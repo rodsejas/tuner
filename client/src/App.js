@@ -1,49 +1,77 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from "react";
+import { accessToken, logout, getCurrentUserProfile } from "./spotify";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  useLocation,
+} from "react-router-dom";
+
 import "./App.css";
-import Album from "./components/Album";
-import Artist from "./components/Artist"
-import Login from "./components/Login"
-import Nav from "./components/Nav";
-import Playback from "./components/Playback" ;
-import Playlist from "./components/Playlist";
-import Search from "./components/Search";
+import { catchErrors } from "./utils";
+import { Login, Profile } from "./pages";
 
-function App() {
+// Scroll to top of page when changing routes
+// https://reactrouter.com/web/guides/scroll-restoration/scroll-to-top
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
   useEffect(() => {
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const accessToken = urlParams.get("access_token");
-    const refreshToken = urlParams.get("refresh_token");
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
-    console.log(accessToken);
-    console.log(refreshToken);
+  return null;
+}
 
-    if (refreshToken) {
-      fetch(`/refresh_token?refresh_token=${refreshToken}`)
-        .then((res) => res.json())
-        .then((data) => console.log(data))
-        .catch((err) => console.error(err));
-    }
+// Fn imports the access token
+function App() {
+  const [token, setToken] = useState(null);
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    setToken(accessToken);
+
+    const fetchData = async () => {
+      const { data } = await getCurrentUserProfile();
+      setProfile(data);
+    };
+
+    catchErrors(fetchData());
   }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <Search/> 
-        <Nav/>
-        <Artist/>
-        <Album/>
-        <Login/>
-        <Playlist/>
-        <Playback/>
-
-
-        <p>
-         
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className="App-link" href="http://localhost:8888/login">
-          Login to Spotify Random Crap
-        </a>
+        {!token ? (
+          <Login />
+        ) : (
+          <>
+            <button onClick={logout}>Log Out</button>
+            <Router>
+              <ScrollToTop />
+              <Switch>
+                <Route path="/artists">
+                  <h1>Artists</h1>
+                </Route>
+                <Route path="/albums">
+                  <h1>Albums</h1>
+                </Route>
+                <Route path="/playlists/:id">
+                  <h1>Playlist</h1>
+                </Route>
+                <Route path="/playlists">
+                  <h1>Playlists</h1>
+                </Route>
+                <Route path="/discover">
+                  <h1>Discover</h1>
+                </Route>
+                <Route path="/">
+                  <Profile />
+                </Route>
+              </Switch>
+            </Router>
+          </>
+        )}
       </header>
     </div>
   );
