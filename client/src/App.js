@@ -1,7 +1,12 @@
-import { useEffect } from "react";
-
-import logo from "./logo.svg";
+import { useEffect } from 'react';
 import "./App.css";
+import Album from "./components/Album";
+import Artist from "./components/Artist"
+import Login from "./components/Login"
+import Nav from "./components/Nav";
+import Playback from "./components/Playback" ;
+import Playlist from "./components/Playlist";
+import Search from "./components/Search";
 
 function App() {
   useEffect(() => {
@@ -23,8 +28,17 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <Search/> 
+        <Nav/>
+        <Artist/>
+        <Album/>
+        <Login/>
+        <Playlist/>
+        <Playback/>
+
+
         <p>
+         
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <a className="App-link" href="http://localhost:8888/login">
