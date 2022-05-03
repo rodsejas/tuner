@@ -1,5 +1,5 @@
 const Login = () => (
-  <a class="button" href="http://localhost:8888/login">
+  <a className="button" href="http://localhost:8888/login">
     Login to Spotify
   </a>
 );
