@@ -1,7 +1,7 @@
 
 import React, {Component} from 'react'
 
-class Playlist extends Component {
+class Playlists extends Component {
     render () {
         return( 
             <h1> Playlist coming soon.</h1>
@@ -9,4 +9,4 @@ class Playlist extends Component {
     }
 };
 
-export default Playlist;
+export default Playlists;

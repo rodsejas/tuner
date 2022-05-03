@@ -9,7 +9,7 @@ import {
 
 import "./App.css";
 import { catchErrors } from "./utils";
-import { Login, Profile } from "./pages";
+import { Login, Profile, Playlists } from "./pages";
 
 // Scroll to top of page when changing routes
 // https://reactrouter.com/web/guides/scroll-restoration/scroll-to-top
@@ -60,7 +60,7 @@ function App() {
                   <h1>Playlist</h1>
                 </Route>
                 <Route path="/playlists">
-                  <h1>Playlists</h1>
+                  <Playlists />
                 </Route>
                 <Route path="/discover">
                   <h1>Discover</h1>
