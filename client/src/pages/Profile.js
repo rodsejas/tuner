@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { getCurrentUserProfile } from "../spotify";
 import { catchErrors } from "../utils";
+import Playlists from "./Playlists";
 
 const Profile = () => {
   const [profile, setProfile] = useState(null);
@@ -26,6 +27,7 @@ const Profile = () => {
           {profile.images.length && profile.images[0].url && (
             <img src={profile.images[0].url} alt="Avatar" />
           )}
+          //
         </div>
       )}
     </>

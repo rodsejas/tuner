@@ -2,6 +2,13 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { getCurrentUserPlaylists } from "../spotify";
 import { catchErrors } from "../utils";
+import "./Playlists.css";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
 
 const Playlists = () => {
   const [playlistsData, setPlaylistsData] = useState(null);
@@ -58,23 +65,40 @@ const Playlists = () => {
   console.log(playlists.items);
 
   return (
-    <div className="fuckity-fuck">
-      <ul>
+    <>
+      <h1> Your playlists</h1>
+      <div className="fuckity-fuck">
         {playlists.items.map((playlist) => {
           return (
-            <li>
-              <a href={playlist.external_urls.spotify}>
-                {playlist.name ? (
-                  <p>{playlist.name}</p>
-                ) : (
-                  <p>Spotify did not name this list</p>
-                )}
-              </a>
-            </li>
+            <Card sx={{ maxWidth: 345 }}>
+              <CardMedia
+                component="img"
+                height="140"
+                image={
+                  playlist.images.length &&
+                  playlist.images[0].url &&
+                  playlist.images[0].url
+                }
+                alt="jkfnerjkfne"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="div">
+                  {playlist.name}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {playlist.description} {playlist.id}
+                  {/* <img src={playlist.images[0].url}></img> */}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small">▶️​</Button>
+                <Button size="small">songs</Button>
+              </CardActions>
+            </Card>
           );
         })}
-      </ul>
-    </div>
+      </div>
+    </>
   );
 };
 

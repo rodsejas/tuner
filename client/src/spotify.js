@@ -151,26 +151,27 @@ export const getFollowedArtists = () => {
 };
 
 export const getRelatedArtists = async () => {
-  
   const response = await axios.get(`/me/following?type=artist`);
   const followed = response.data.artists.items;
-  const random = Math.floor(Math.random() * followed.length)
-  let newFollowed = response.data.artists.items[random].id
-  const relatedArtists = await axios.get(`https://api.spotify.com/v1/artists/${newFollowed}/related-artists`);
+  const random = Math.floor(Math.random() * followed.length);
+  let newFollowed = response.data.artists.items[random].id;
+  const relatedArtists = await axios.get(
+    `https://api.spotify.com/v1/artists/${newFollowed}/related-artists`
+  );
   return relatedArtists;
-}
+};
 
 export const getAlbums = () => {
-return axios.get(`https://api.spotify.com/v1/me/albums`)
-}
+  return axios.get(`https://api.spotify.com/v1/me/albums`);
+};
 /**
  * Get a User Search Query
- * https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-current-users-profile 
-* @returns {Promise}
+ * https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-current-users-profile
+ * @returns {Promise}
  */
- export const getSearchQuery = (searchQuery) => axios.get(`/search?${ searchQuery }`);
+export const getSearchQuery = (searchQuery) =>
+  axios.get(`/search?${searchQuery}`);
 // export const getSearchQuery = (searchQuery) => axios.get(`/search?q=bob&type=artist&limit=50&offset=5`);
-
 
 /* e.g https://api.spotify.com/v1/search?q=bob&type=artist&limit=50&offset=5
  *
@@ -187,7 +188,6 @@ export const getCurrentUserPlaylists = (limit = 20) => {
  * @returns [ @Array ]
  */
 export const getRecommendations = async () => {
-  debugger;
   // Sending a request to Spotty endpoint, using await to ensure it completes the request before sending back to me. Storing in a variable is also important to ensure it stores an object rather than a "promise".
   const response = await axios.get("/me/top/artists");
   // Take the specific items I need from the object data.

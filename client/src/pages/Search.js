@@ -1,16 +1,18 @@
-
 import SearchBar from "../components/SearchBar";
-import { Component } from 'react';
+import { Component } from "react";
+import Typography from "@mui/material/Typography";
 
 class Search extends Component {
-    render () {
-        return(
-            <div>
-                <h1> Search CannedTunr ...</h1>
-                <SearchBar />
-            </div>
-        )
-    }
+  render() {
+    return (
+      <div>
+        <Typography variant="h1" component="div" gutterBottom>
+          Search Canned Tunr
+        </Typography>
+        <SearchBar />
+      </div>
+    );
+  }
 }
 
-export default Search
+export default Search;
