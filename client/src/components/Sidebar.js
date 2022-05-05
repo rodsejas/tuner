@@ -39,7 +39,7 @@ export default function Sidebar(props) {
       <CssBaseline />
       <AppBar
         position="fixed"
-        sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
       >
         <Stack
           direction="row"
