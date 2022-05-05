@@ -144,3 +144,21 @@ axios.defaults.headers["Content-Type"] = "application/json";
  * @returns {Promise}
  */
 export const getCurrentUserProfile = () => axios.get("/me");
+
+export const getFollowedArtists = () => {
+  return axios.get(`/me/following?type=artist`);
+};
+
+export const getRelatedArtists = async () => {
+  
+  const response = await axios.get(`/me/following?type=artist`);
+  const followed = response.data.artists.items;
+  const random = Math.floor(Math.random() * followed.length)
+  let newFollowed = response.data.artists.items[random].id
+  const relatedArtists = await axios.get(`https://api.spotify.com/v1/artists/${newFollowed}/related-artists`);
+  return relatedArtists;
+}
+
+export const getAlbums = () => {
+return axios.get(`https://api.spotify.com/v1/me/albums`)
+}

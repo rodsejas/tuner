@@ -10,6 +10,8 @@ import {
 import "./App.css";
 import { catchErrors } from "./utils";
 import { Login, Profile } from "./pages";
+import Artist from "./pages/Artist";
+import Album from "./components/Album";
 
 // Scroll to top of page when changing routes
 // https://reactrouter.com/web/guides/scroll-restoration/scroll-to-top
@@ -52,9 +54,11 @@ function App() {
               <Switch>
                 <Route path="/artists">
                   <h1>Artists</h1>
+                  <Artist/>
                 </Route>
                 <Route path="/albums">
                   <h1>Albums</h1>
+                  <Album/>
                 </Route>
                 <Route path="/playlists/:id">
                   <h1>Playlist</h1>
