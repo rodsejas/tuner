@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { getCurrentUserProfile } from "../spotify";
 import { catchErrors } from "../utils";
 import { getAlbums } from '../spotify';
-import RelatedArtists from './RelatedArtist';
 
 const Albums = () => {
   const [albums, setAlbums] = useState(null);
@@ -35,4 +34,3 @@ const Albums = () => {
   );
 };
 export default Albums;
-
