@@ -17,6 +17,7 @@ import {
   Playlists,
   Discover,
   Template,
+  Search,
 } from "./pages";
 
 /**
@@ -66,7 +67,7 @@ function App() {
                 <Link to="/albums">Albums</Link>
                 <Link to="/playlists">Playlists</Link>
                 <Link to="/discover">Discover</Link>
-                <Link to="/template">Template</Link>
+                <Link to="/search">Search</Link>
               </nav>
 
               <Switch>

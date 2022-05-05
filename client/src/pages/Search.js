@@ -1,6 +1,6 @@
 
 import SearchBar from "../components/SearchBar";
-import { Component, useState, useEffect } from 'react';
+import { Component } from 'react';
 
 class Search extends Component {
     render () {
