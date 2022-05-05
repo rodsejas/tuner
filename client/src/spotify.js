@@ -9,7 +9,9 @@ const LOCALSTORAGE_KEYS = {
   timestamp: "spotify_token_timestamp",
 };
 
-// Map to retrieve local storage values (current)
+/**
+ * Retrieve local storage values from current window.
+ */
 const LOCALSTORAGE_VALUES = {
   accessToken: window.localStorage.getItem(LOCALSTORAGE_KEYS.accessToken),
   refreshToken: window.localStorage.getItem(LOCALSTORAGE_KEYS.refreshToken),
@@ -22,7 +24,6 @@ const LOCALSTORAGE_VALUES = {
  * @returns {void}
  */
 export const logout = () => {
-  // Clear all localStorage items
   for (const property in LOCALSTORAGE_KEYS) {
     window.localStorage.removeItem(LOCALSTORAGE_KEYS[property]);
   }
@@ -154,4 +155,39 @@ export const getCurrentUserProfile = () => axios.get("/me");
 // export const getSearchQuery = (searchQuery) => axios.get(`/search?q=bob&type=artist&limit=50&offset=5`);
 
 
-// e.g https://api.spotify.com/v1/search?q=bob&type=artist&limit=50&offset=5
+/* e.g https://api.spotify.com/v1/search?q=bob&type=artist&limit=50&offset=5
+ *
+ * Get Current User's Playlists
+ * @returns {Promise}
+ */
+export const getCurrentUserPlaylists = (limit = 20) => {
+  return axios.get(`/me/playlists?limit=${limit}`);
+};
+
+/**
+ * Get current user's top 5 artists and log artist ID's.
+ * Use artist ID's to get Spotify recommendations.
+ * @returns [ @Array ]
+ */
+export const getRecommendations = async () => {
+  debugger;
+  // Sending a request to Spotty endpoint, using await to ensure it completes the request before sending back to me. Storing in a variable is also important to ensure it stores an object rather than a "promise".
+  const response = await axios.get("/me/top/artists");
+  // Take the specific items I need from the object data.
+  // Get top artists
+  // Slice to get top 5 only
+  const artists = response.data.items;
+  const topArtists = artists.slice(0, 5);
+  // Map over each artist and get the IDs in an array
+  const artistIDs = topArtists.map((artist) => {
+    return artist.id;
+  });
+  const seedArtists = artistIDs.join(",");
+
+  // Run my next request and interpolate on the endpoint URL
+  const recommendations = await axios.get(
+    `/recommendations?seed_artists=${seedArtists}`
+  );
+  // ONLY return the recommendations
+  return recommendations.data.tracks;
+};

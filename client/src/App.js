@@ -5,13 +5,24 @@ import {
   Switch,
   Route,
   useLocation,
+  Link,
 } from "react-router-dom";
 import "./App.css";
 import { catchErrors } from "./utils";
-import { Login, Profile, Search } from "./pages";
+import {
+  Login,
+  Profile,
+  Artists,
+  Albums,
+  Playlists,
+  Discover,
+  Template,
+} from "./pages";
 
-// Scroll to top of page when changing routes
-// https://reactrouter.com/web/guides/scroll-restoration/scroll-to-top
+/**
+ * Scroll to top of page when visiting new routes.
+ * https://reactrouter.com/web/guides/scroll-restoration/scroll-to-top
+ */
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -49,21 +60,33 @@ function App() {
             <button onClick={logout}>Log Out</button>
             <Router>
               <ScrollToTop />
+              <nav>
+                <Link to="/">Home</Link>
+                <Link to="/artists">Artists</Link>
+                <Link to="/albums">Albums</Link>
+                <Link to="/playlists">Playlists</Link>
+                <Link to="/discover">Discover</Link>
+                <Link to="/template">Template</Link>
+              </nav>
+
               <Switch>
                 <Route path="/artists">
-                  <h1>Artists</h1>
+                  <Artists />
                 </Route>
                 <Route path="/albums">
-                  <h1>Albums</h1>
+                  <Albums />
                 </Route>
                 <Route path="/playlists/:id">
                   <h1>Playlist</h1>
                 </Route>
                 <Route path="/playlists">
-                  <h1>Playlists</h1>
+                  <Playlists />
                 </Route>
                 <Route path="/discover">
-                  <h1>Discover</h1>
+                  <Discover />
+                </Route>
+                <Route path="/template">
+                  <Template />
                 </Route>
                 <Route path="/search">
                   <Search />
