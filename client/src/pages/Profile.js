@@ -27,7 +27,6 @@ const Profile = () => {
           {profile.images.length && profile.images[0].url && (
             <img src={profile.images[0].url} alt="Avatar" />
           )}
-          //
         </div>
       )}
     </>
