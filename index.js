@@ -1,6 +1,5 @@
 // Allows .env file to be read
 require("dotenv").config();
-// Instantiate Express
 const { application } = require("express");
 const express = require("express");
 const app = express();
@@ -8,7 +7,10 @@ const queryString = require("query-string");
 const axios = require("axios");
 // Define a port
 const port = 8888;
-// ENV Variables
+
+/**
+ * Environment variables
+ */
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
@@ -25,6 +27,7 @@ app.get("/", (req, res) => {
 
 /**
  * Generates a random string containing numbers and letters
+ * Used to assign state key for prevention of cross-site forgery attacks
  * @param  {number} length The length of the string
  * @return {string} The generated string
  */
@@ -44,7 +47,8 @@ app.get("/login", (req, res) => {
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  const scope = "user-read-private user-read-email";
+  const scope =
+    "user-read-private user-read-email user-top-read playlist-read-private";
 
   const queryParams = queryString.stringify({
     client_id: CLIENT_ID,
@@ -120,7 +124,9 @@ app.get("/refresh_token", (req, res) => {
     });
 });
 
-// Tell Express to listen to a port
+/**
+ * Assign a port for Express to listen to.
+ */
 app.listen(port, () => {
   console.log(`Express port is listening at http://localhost:${port}`);
 });
