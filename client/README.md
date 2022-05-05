@@ -1,10 +1,16 @@
-# Getting Started with Create React App
+# canned-tunr
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Description
 
-In the project directory, you can run:
+    TO DO .... 
+
+
+
+## Configuration
+
+### Available Scripts
+
 
 ### `npm start`
 
@@ -14,57 +20,147 @@ Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+## Advanced Configuration
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Local Installation & Set Up
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Register a  Spotify App  [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/). Add `http://localhost:8888/callback` as a Redirect URI in the Spotify app's settings tab
 
-### `npm run eject`
+2. Create a `.env` file at the root of the project based on  the `.env.example`.  
+   Add a unique `CLIENT_ID` and `CLIENT_SECRET` from the Spotify dashboard
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Install [npm](https://www.npmjs.com/) 
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Install the correct version of Node
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+5. Install dependencies
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```shell
+    npm install
+```
 
-## Learn More
+6. Run the React app on <http://localhost:3000> and the Node server on <http://localhost:8888>
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```shell
+    npm start
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Production deployment to Heroku
 
-### Code Splitting
+white-list Production redirect URI in the Spotify app dashboard  https://canned-tunr.herokuapp.com/callback.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```shell
+    //.env GLOBAL VARIABLES 
+    CLIENT_ID=XXX CLIENT_SECRET=XXX 
+    REDIRECT_URI=http://localhost:8888/callback 
+    FRONTEND_URI=http://localhost:3000
+```
 
-### Analyzing the Bundle Size
+Implement environment globals in server source code index.js 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+```shell
+    const CLIENT_ID = process.env.CLIENT_ID; 
+    const CLIENT_SECRET = process.env.CLIENT_SECRET; 
+    const REDIRECT_URI = process.env.REDIRECT_URI; 
+    const FRONTEND_URI = process.env.FRONTEND_URI; 
+    const PORT = process.env.PORT || 8888;
+```
+Heroku dynos expose a dynamic port to allow the app to bind to on the PORT variable. 
 
-### Making a Progressive Web App
+Redirects are implemented in index.js 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```shell
+    res.redirect(`${FRONTEND_URI}/?${queryParams}`);
+```
 
-### Advanced Configuration
+Implement environment variables in the client source  client/src/pages/Login.js
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+```shell
+    const LOGIN_URI =
+    process.env.NODE_ENV !== 'production'
+        ? 'http://localhost:8888/login'
+        : 'https://spotify-profile-v2.herokuapp.com/login';
 
-### Deployment
+    const Login = () => (
+        <StyledLoginContainer>
+            <StyledLoginButton href={LOGIN_URI}>
+                Log in to Spotify
+            </StyledLoginButton>
+        </StyledLoginContainer>
+    );
+ ```
+Add environment variable for production build to the ‘config vars’ section of the Heroku app in the ‘settings’ tab.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+REDIRECT_URI and FRONTEND_URI  differ from development to production:
 
-### `npm run build` fails to minify
+- For the redirect URI (server backend interfaces to Spotify APIs
+    - https://canned-tunr.herokuapp.com/callback  (prod)
+    - http://localhost:8888/callback (dev)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+- For the Front End URI 
+    - https://canned-tunr.herokuapp.com (prod)
+    - http://localhost:3000 (dev)
+
+
+Package.json changes are required to build production instance on Heroku. 
+
+The 'engines' statement will direct heroku to build the app using the specified veriosn of node.
+
+'CachedDirectories' directs heroku to cache node_modules for fromt and backend deployments  - improving performance.
+
+The npm 'concurrently' lib will only work on localhost. 
+
+The build script will direct heroku how to install and build the solution, in conjunction with the 'Procfile' configuration file 
+
+ ```shell
+  "engines": {
+    "node": "14.15.0"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "client/node_modules"
+  ],
+  "scripts": {
+    "start": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "server": "nodemon index.js",
+    "client": "cd client && npm start",
+    "postinstall": "cd client && npm install",
+    "build": "NODE_ENV=production cd client/ && npm install && npm run build",
+    "start-server": "node index.js"
+  }, 
+ ```
+
+Add an Heroku 'Procfile' to issue start server commands 
+Create a  Procfile in the root of the project source.
+Text: 
+ ```shell
+    web: npm run start-server
+ ```
+
+Configure teh Express app to serve all React  routes.
+Add the following to index.js 
+
+ ```shell
+    const path = require('path');
+ ```
+
+Add the following to the top of index.js file, before the declaration of the  Express routes, but after the declaration of the app variable.  
+This directs the Express app to priority-serve any static files from the React app.
+
+ ```shell
+// Priority serve any static files.
+app.use(express.static(path.resolve(__dirname, './client/build')));
+ ```
+
+Add the following statemen to the bottom of index.js file, after all Express routes declarations, but before the app.listen() declaration.
+
+ ```shell
+// All remaining requests return the React app, so it can handle routing.
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, './client/build', 'index.html'));
+});
+ ```
