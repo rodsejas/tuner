@@ -1,0 +1,10 @@
+.recommendations-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 25px;
+}
+
+.track-container {
+    font-size: 18px;
+    border: 2px solid red;
+}

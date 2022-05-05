@@ -144,3 +144,14 @@ axios.defaults.headers["Content-Type"] = "application/json";
  * @returns {Promise}
  */
 export const getCurrentUserProfile = () => axios.get("/me");
+
+/**
+ * Get a User Search Query
+ * https://developer.spotify.com/documentation/web-api/reference/#endpoint-get-current-users-profile 
+* @returns {Promise}
+ */
+ export const getSearchQuery = (searchQuery) => axios.get(`/search?${ searchQuery }`);
+// export const getSearchQuery = (searchQuery) => axios.get(`/search?q=bob&type=artist&limit=50&offset=5`);
+
+
+// e.g https://api.spotify.com/v1/search?q=bob&type=artist&limit=50&offset=5

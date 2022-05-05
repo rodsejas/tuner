@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
-import { accessToken, logout, getCurrentUserProfile } from "./spotify";
+import { accessToken, logout, getCurrentUserProfile, getSearchQuery } from "./spotify";
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   useLocation,
 } from "react-router-dom";
-
 import "./App.css";
 import { catchErrors } from "./utils";
-import { Login, Profile } from "./pages";
+import { Login, Profile, Search } from "./pages";
 
 // Scroll to top of page when changing routes
 // https://reactrouter.com/web/guides/scroll-restoration/scroll-to-top
@@ -27,6 +26,7 @@ function ScrollToTop() {
 function App() {
   const [token, setToken] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(null);
 
   useEffect(() => {
     setToken(accessToken);
@@ -65,12 +65,16 @@ function App() {
                 <Route path="/discover">
                   <h1>Discover</h1>
                 </Route>
+                <Route path="/search">
+                  <Search />
+                </Route>
                 <Route path="/">
                   <Profile />
                 </Route>
               </Switch>
             </Router>
           </>
+
         )}
       </header>
     </div>
